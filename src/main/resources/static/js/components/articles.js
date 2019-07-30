@@ -2,7 +2,8 @@ var Articles = React.createClass({
 	getInitialState: function(){
 		return{
 			currentPage: 0,
-			pageSize: 10
+			pageSize: 10,
+			articles: []
 		};
 	},
 	
@@ -13,7 +14,7 @@ var Articles = React.createClass({
 	fetchArticles: function(){
 		fetch("http://localhost:8080/articles?page=" + this.state.currentPage + "&size=" + this.state.pageSize)
 		.then(response => response.json())
-		.then(json => console.log(json));
+		.then(json => this.setState( {articles: json} ));
 	},
 	
 	handlePrevClick: function(){
@@ -28,7 +29,11 @@ var Articles = React.createClass({
 	render: function(){
 		return (
 			<div>
-				<h1>Articles</h1>
+				<ul>
+					{this.state.articles.map((item, index) => (
+							<li key={item.id}>{item.by}</li>
+					))}
+				</ul>
 				<button onClick={this.handlePrevClick}>Prev</button>
 				<button onClick={this.handleNextClick}>Next</button>
 			</div>
