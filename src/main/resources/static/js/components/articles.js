@@ -3,7 +3,8 @@ var Articles = React.createClass({
 		return{
 			currentPage: 0,
 			pageSize: 10,
-			articles: []
+			articles: [],
+			finalPage: false
 		};
 	},
 	
@@ -14,26 +15,40 @@ var Articles = React.createClass({
 	fetchArticles: function(){
 		fetch("http://localhost:8080/articles?page=" + this.state.currentPage + "&size=" + this.state.pageSize)
 		.then(response => response.json())
-		.then(json => this.setState( {articles: json} ));
+		.then(json => this.loadArticles(json) );
+	},
+	
+	loadArticles: function(articles){
+		if(articles.length != 0)
+			this.setState( {articles: articles} );
+		else
+			//go back a page since the current page is empty
+			this.setState( {currentPage: this.state.currentPage - 1, finalPage: true} );
 	},
 	
 	handlePrevClick: function(){
 		if(this.state.currentPage > 0)
-			this.setState({currentPage: this.state.currentPage - 1}, () => this.fetchArticles());
+			this.setState({currentPage: this.state.currentPage - 1, finalPage: false}, () => this.fetchArticles());
 	},
 	
 	handleNextClick: function(){
-		this.setState({currentPage: this.state.currentPage + 1}, () => this.fetchArticles());
+		if(!this.state.finalPage)
+			this.setState({currentPage: this.state.currentPage + 1}, () => this.fetchArticles());
 	},
 	
 	render: function(){
 		return (
 			<div>
-				<ul>
-					{this.state.articles.map((item, index) => (
-							<li key={item.id}>{item.by}</li>
+				<table>
+					<tbody>
+					{this.state.articles.map((article, index) => (
+							<tr key={article.id} >
+								<td>{article.by}</td>
+								<td> <a href={article.url} target="_blank" >{article.title}</a> </td>
+							</tr>
 					))}
-				</ul>
+					</tbody>
+				</table>
 				<button onClick={this.handlePrevClick}>Prev</button>
 				<button onClick={this.handleNextClick}>Next</button>
 			</div>
