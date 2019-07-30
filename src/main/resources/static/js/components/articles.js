@@ -39,7 +39,13 @@ var Articles = React.createClass({
 	render: function(){
 		return (
 			<div>
-				<table>
+				<table className="table">
+					<thead className="thead-dark">
+						<tr>
+							<th>Author</th>
+							<th>Title</th>
+						</tr>
+					</thead>
 					<tbody>
 					{this.state.articles.map((article, index) => (
 							<tr key={article.id} >
@@ -49,8 +55,10 @@ var Articles = React.createClass({
 					))}
 					</tbody>
 				</table>
-				<button onClick={this.handlePrevClick}>Prev</button>
-				<button onClick={this.handleNextClick}>Next</button>
+				<div className="float-right">
+				<button id="PrevButton" className="float-left btn btn-dark" onClick={this.handlePrevClick}>Prev</button>
+				<button className="float-right btn btn-dark" onClick={this.handleNextClick}>Next</button>
+				</div>
 			</div>
 		);
 	}
