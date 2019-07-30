@@ -13,6 +13,13 @@ public class Article {
 	private String title;
 	private String url;
 	
+	public Article(String id, String by, String title, String url) {
+		this.id = id;
+		this.by = by;
+		this.title = title;
+		this.url = url;
+	}
+	
 	public String getId() {
 		return id;
 	}
